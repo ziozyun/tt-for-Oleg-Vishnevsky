@@ -1,0 +1,31 @@
+services:
+  app:
+    image: bitnami/laravel:11.6.1
+    environment:
+      - LARAVEL_DATABASE_TYPE=mysql
+      - LARAVEL_DATABASE_HOST=mysql
+      - LARAVEL_DATABASE_PORT_NUMBER=3306
+      - LARAVEL_DATABASE_NAME=$MYSQL_DB
+      - LARAVEL_DATABASE_USER=$MYSQL_USER
+      - LARAVEL_DATABASE_PASSWORD=$MYSQL_PASSWORD
+    volumes:
+      - ./services/laravel:/app
+    ports:
+      - $APP_PORT:8000
+    depends_on:
+      - mysql
+
+  mysql:
+    image: bitnami/mysql:8.4.4
+    environment:
+      MYSQL_DATABASE: $MYSQL_DB
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+    ports:
+      - $MYSQL_PORT:3306
+    volumes:
+      - mysql_data:/bitnami/mysql
+
+volumes:
+  mysql_data:
